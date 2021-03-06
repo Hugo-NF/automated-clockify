@@ -1,13 +1,17 @@
 {
-  "name": "automatedreports",
+  "name": "automated-clockify",
   "version": "1.0.0",
   "description": "Sends an e-mail weekly reports from Clockify ",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hugo-NF",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hugo-NF/automated-clockify.git"
+  },
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
