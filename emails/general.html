@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat&display=swap" rel="stylesheet">
+    <title>${title}</title>
+    <style>
+       .card {
+          background-color: transparent;
+          border-color: transparent;
+       }
+       .card-footer {
+          background-color: transparent;
+          border-color: transparent;
+       }
+       .logo-orion {
+          margin-top: 1.4em;
+          margin-left:1.1em;
+          margin-right:1.1em;
+          width: 150px;
+       }
+       h1 {
+          font-family: 'Exo 2', sans-serif;
+       }
+       h5 {
+          font-family: 'Exo 2', sans-serif;
+       }
+       h6 {
+          font-family: 'Exo 2', sans-serif;
+       }
+       p {
+          font-family: 'Montserrat', sans-serif;
+       }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container">
+      <div class="card my-5">
+        <div class="card-body">
+          <h1>${title}</h1>
+          <h5 class="text-muted mb-2">Em anexo, segue .pdf extraído do Clockify, referente ao período de ${startDate} até ${endDate}.</h5>
+          <h6 class="text-muted mb-2">Este é um relatório automático, caso perceba alguma inconsistência nos dados do Clockify, <a href="mailto:${senderEmail}">responda esse e-mail</a> e corrigirei prontamente.</h6>
+        </div>
+      </div>
+
+      <!-- Signature card -->
+      <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img
+              src="https://www.grupoorion.com.br/wp-content/themes/orion/images/politicaDePrivacidade/logoOrion.png"
+              class="logo-orion"
+              alt="logo-orion"
+            >
+            <img
+              src="https://www.grupoorion.com.br/wp-content/themes/orion/images/politicaDePrivacidade/cadavezmaisconectado.png"
+              class="logo-orion"
+              alt="logo-orion-conectados"
+            >
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Hugo Fonseca</h5>
+              <p class="card-text">Desenvolvedor de software</p>
+              <p class="text-muted m-0">hugo.fonseca@grupoorion.com.br</p>
+              <p class="text-muted m-0">+55 (61) 99110-1515</p>
+              <p class="card-text"><a target="_blank" href="https://www.grupoorion.com.br/"><small class="text-muted">www.grupoorion.com.br</small></a></p>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.github.com/Hugo-NF" target="_blank" class="btn m-2">
+                <img src="https://cdn0.iconfinder.com/data/icons/octicons/1024/mark-github-24.png">
+              </a>
+              <a href="https://www.linkedin.com/in/hugo-fonseca-723a41184/" target="_blank" class="btn m-2">
+                <img src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Linkedin_unofficial_colored_svg-24.png">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

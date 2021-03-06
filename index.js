@@ -2,4 +2,9 @@ require('dotenv/config');
 
 const { buildReport } = require('./src/buildReport');
 
-buildReport('weekly');
+try {
+  buildReport('weekly');
+} catch (err) {
+  console.log(err);
+  process.exit(-1);
+}

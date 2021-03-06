@@ -2,6 +2,7 @@ const fs = require('fs');
 const { getCurrentUser, detailedReport } = require('./clockify');
 
 const { sendEmail } = require('./emailSender');
+const { generalEmail } = require('../emails/general');
 
 Date.prototype.addDays = function (days) {
   const date = new Date(this.valueOf());
@@ -13,6 +14,11 @@ Date.prototype.addMonth = function (month) {
   const date = new Date(this.valueOf());
   date.setMonth(date.getMonth() + month);
   return date;
+};
+
+Date.prototype.formatDate = function (includeYear) {
+  const date = new Date(this.valueOf());
+  return `${date.getDate()}/${date.getMonth() + 1}${includeYear ? `/${date.getFullYear()}` : ''}`;
 };
 
 const executionDay = {
@@ -37,7 +43,7 @@ const setTimespan = (timespan, currentTimestamp) => {
 
       dateRangeStart.setHours(0, 0, 0, 0);
       dateRangeEnd.setHours(0, 0, 0, 0);
-      return { dateRangeStart, dateRangeEnd };
+      return { spanName: 'semanal', dateRangeStart, dateRangeEnd };
     }
     case 'monthly': {
       const dateRangeStart = currentTimestamp.addMonth(-1);
@@ -47,7 +53,7 @@ const setTimespan = (timespan, currentTimestamp) => {
 
       dateRangeStart.setHours(0, 0, 0, 0);
       dateRangeEnd.setHours(0, 0, 0, 0);
-      return { dateRangeStart, dateRangeEnd };
+      return { spanName: 'mensal', dateRangeStart, dateRangeEnd };
     }
   }
 };
@@ -56,13 +62,11 @@ module.exports.buildReport = function (timespan) {
   getCurrentUser()
     .then((userResponse) => {
       const currentTimestamp = new Date('2021-03-08T03:00:00.000Z');
-      const { dateRangeStart, dateRangeEnd } = setTimespan(timespan, currentTimestamp);
+      const { spanName, dateRangeStart, dateRangeEnd } = setTimespan(timespan, currentTimestamp);
 
       const {
         id,
         name,
-        email,
-        profilePicture,
         activeWorkspace,
       } = userResponse.data;
 
@@ -109,11 +113,16 @@ module.exports.buildReport = function (timespan) {
           const message = {
             from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
             to: RECEIVERS_LIST,
-            subject: `Relatório Semanal (${dateRangeStart.toLocaleDateString()} - ${dateRangeEnd.toLocaleDateString()})`,
-            html: 'TODO: Falta brilhar aqui ainda',
+            subject: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)})`,
+            html: generalEmail(
+              `Relatório ${spanName} de atividades`,
+              dateRangeStart.formatDate(true),
+              dateRangeEnd.formatDate(true),
+              SENDER_EMAIL,
+            ),
             attachments: [
               {
-                filename: `Clockify - Relatório semanal - ${name}.pdf`,
+                filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
                 path: './report.pdf',
                 contentType: 'application/pdf',
               },
