@@ -127,8 +127,8 @@ module.exports.buildReport = function (timespan) {
                 contentType: 'application/pdf',
               },
             ],
-            onError: () => fs.unlinkSync('./report.pdf'),
-            onSuccess: () => fs.unlinkSync('./report.pdf'),
+            onError: (res) => console.log(`E-mails sent successfully: ${res}`),
+            onSuccess: (err) => console.log(`E-mails failed to send: ${err}`),
           };
 
           sendEmail(emailAuthOptions, message);
