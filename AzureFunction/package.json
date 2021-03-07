@@ -1,11 +1,20 @@
 {
-  "name": "azurefunction",
+  "name": "automated-clockify",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sends an e-mail weekly reports from Clockify ",
   "scripts": {
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "nodemailer": "^6.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
 }

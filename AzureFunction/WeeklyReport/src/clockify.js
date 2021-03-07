@@ -1,4 +1,3 @@
-const { default: axios } = require('axios');
 const { clockify, clockifyReports } = require('./axios');
 
 const getCurrentUser = async () => clockify.get('/user');
