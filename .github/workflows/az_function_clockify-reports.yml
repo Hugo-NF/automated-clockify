@@ -6,7 +6,7 @@ name: Build and deploy Node.js project to Azure Function App - clockify-reports
 on:
   push:
     branches:
-      - az_function
+      - master
   workflow_dispatch:
 
 env:
