@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { getCurrentUser, detailedReport } = require('./clockify');
+const getStream = require('get-stream');
 
+const { getCurrentUser, detailedReport } = require('./clockify');
 const { sendEmail } = require('./emailSender');
 const { generalEmail } = require('../emails/general');
 
@@ -108,30 +108,31 @@ module.exports.buildReport = function (timespan) {
               ciphers: 'SSLv3',
             },
           };
-          reportReponse.data.pipe(fs.createWriteStream('./report.pdf'));
+          getStream.buffer(reportReponse.data)
+            .then((stream) => {
+              const message = {
+                from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
+                to: RECEIVERS_LIST,
+                subject: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)})`,
+                html: generalEmail(
+                  `Relatório ${spanName} de atividades`,
+                  dateRangeStart.formatDate(true),
+                  dateRangeEnd.formatDate(true),
+                  SENDER_EMAIL,
+                ),
+                attachments: [
+                  {
+                    filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
+                    content: stream,
+                    contentType: 'application/pdf',
+                  },
+                ],
+                onError: (err) => console.log(`E-mail failed: ${JSON.stringify(err)}`),
+                onSuccess: (res) => console.log(`E-mail sent successfully: ${JSON.stringify(res)}`),
+              };
 
-          const message = {
-            from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
-            to: RECEIVERS_LIST,
-            subject: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)})`,
-            html: generalEmail(
-              `Relatório ${spanName} de atividades`,
-              dateRangeStart.formatDate(true),
-              dateRangeEnd.formatDate(true),
-              SENDER_EMAIL,
-            ),
-            attachments: [
-              {
-                filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
-                path: './report.pdf',
-                contentType: 'application/pdf',
-              },
-            ],
-            onError: () => fs.unlinkSync('./report.pdf'),
-            onSuccess: () => fs.unlinkSync('./report.pdf'),
-          };
-
-          sendEmail(emailAuthOptions, message);
+              sendEmail(emailAuthOptions, message);
+            });
         })
         .catch((err) => {
           console.log(err);
