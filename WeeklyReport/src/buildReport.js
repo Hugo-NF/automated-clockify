@@ -58,7 +58,7 @@ const setTimespan = (timespan, currentTimestamp) => {
   }
 };
 
-module.exports.buildReport = function (timespan) {
+module.exports.buildReport = function (context, timespan) {
   getCurrentUser()
     .then((userResponse) => {
       const currentTimestamp = new Date();
@@ -127,18 +127,18 @@ module.exports.buildReport = function (timespan) {
                     contentType: 'application/pdf',
                   },
                 ],
-                onError: (err) => console.log(`E-mail failed: ${JSON.stringify(err)}`),
-                onSuccess: (res) => console.log(`E-mail sent successfully: ${JSON.stringify(res)}`),
+                onError: (err) => context.log(`E-mail failed: ${JSON.stringify(err)}`),
+                onSuccess: (res) => context.log(`E-mail sent successfully: ${JSON.stringify(res)}`),
               };
 
               sendEmail(emailAuthOptions, message);
             });
         })
         .catch((err) => {
-          console.log(err);
+          context.log(err);
         });
     })
     .catch((error) => {
-      console.log(error);
+      context.log(error);
     });
 };
