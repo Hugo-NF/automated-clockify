@@ -10,13 +10,12 @@ module.exports = async function (context, myTimer) {
   }
 
   try {
-    buildReport('weekly');
+    buildReport(context, 'weekly');
   } catch (err) {
-    console.log(err);
+    context.log(err);
     process.exit(-1);
   }
-  context.log(`Environment: ${JSON.stringify(process.env)}`);
-  context.log('JavaScript timer trigger function ran!', timeStamp);
+  context.log('Timer trigger function ran at', timeStamp);
 };
 
 // 0 11 * * MON
