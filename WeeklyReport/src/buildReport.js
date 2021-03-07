@@ -1,4 +1,4 @@
-const fs = require('fs');
+const blobStream = require('blob-stream');
 const { getCurrentUser, detailedReport } = require('./clockify');
 
 const { sendEmail } = require('./emailSender');
@@ -108,30 +108,34 @@ module.exports.buildReport = function (timespan) {
               ciphers: 'SSLv3',
             },
           };
-          reportReponse.data.pipe(fs.createWriteStream('./report.pdf'));
 
-          const message = {
-            from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
-            to: RECEIVERS_LIST,
-            subject: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)})`,
-            html: generalEmail(
-              `Relatório ${spanName} de atividades`,
-              dateRangeStart.formatDate(true),
-              dateRangeEnd.formatDate(true),
-              SENDER_EMAIL,
-            ),
-            attachments: [
-              {
-                filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
-                path: './report.pdf',
-                contentType: 'application/pdf',
-              },
-            ],
-            onError: (res) => console.log(`E-mails sent successfully: ${res}`),
-            onSuccess: (err) => console.log(`E-mails failed to send: ${err}`),
-          };
+          reportReponse.data
+            .pipe(blobStream())
+            .on('finish', () => {
+              const pdfBlob = this.toBlob();
+              const message = {
+                from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
+                to: RECEIVERS_LIST,
+                subject: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)})`,
+                html: generalEmail(
+                  `Relatório ${spanName} de atividades`,
+                  dateRangeStart.formatDate(true),
+                  dateRangeEnd.formatDate(true),
+                  SENDER_EMAIL,
+                ),
+                attachments: [
+                  {
+                    filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
+                    content: pdfBlob,
+                    contentType: 'application/pdf',
+                  },
+                ],
+                onError: (res) => console.log(`E-mails sent successfully: ${res}`),
+                onSuccess: (err) => console.log(`E-mails failed to send: ${err}`),
+              };
 
-          sendEmail(emailAuthOptions, message);
+              sendEmail(emailAuthOptions, message);
+            });
         })
         .catch((err) => {
           console.log(err);

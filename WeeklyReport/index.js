@@ -6,7 +6,7 @@ module.exports = async function (context, myTimer) {
   const timeStamp = new Date().toISOString();
 
   if (myTimer.IsPastDue) {
-    context.log('JavaScript is running late!')
+    context.log('JavaScript is running late!');
   }
 
   try {

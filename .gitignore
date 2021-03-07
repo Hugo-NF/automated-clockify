@@ -1,3 +1,9 @@
+# Azure Functions artifacts
+bin
+obj
+appsettings.json
+local.settings.json
+
 # Logs
 logs
 *.log
@@ -102,9 +108,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-# Azure Functions artifacts
-bin
-obj
-appsettings.json
-local.settings.json

@@ -8,7 +8,7 @@
 			"isBackground": true,
 			"dependsOn": "npm install",
 			"options": {
-				"cwd": "${workspaceFolder}/AzureFunction"
+				"cwd": "${workspaceFolder}/"
 			}
 		},
 		{
@@ -16,7 +16,7 @@
 			"label": "npm install",
 			"command": "npm install",
 			"options": {
-				"cwd": "${workspaceFolder}/AzureFunction"
+				"cwd": "${workspaceFolder}/"
 			}
 		},
 		{
@@ -25,7 +25,7 @@
 			"command": "npm prune --production",
 			"problemMatcher": [],
 			"options": {
-				"cwd": "${workspaceFolder}/AzureFunction"
+				"cwd": "${workspaceFolder}/"
 			}
 		}
 	]
