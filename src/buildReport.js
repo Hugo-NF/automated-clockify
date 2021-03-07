@@ -61,7 +61,7 @@ const setTimespan = (timespan, currentTimestamp) => {
 module.exports.buildReport = function (timespan) {
   getCurrentUser()
     .then((userResponse) => {
-      const currentTimestamp = new Date('2021-03-08T03:00:00.000Z');
+      const currentTimestamp = new Date();
       const { spanName, dateRangeStart, dateRangeEnd } = setTimespan(timespan, currentTimestamp);
 
       const {
