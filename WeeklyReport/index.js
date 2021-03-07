@@ -15,6 +15,7 @@ module.exports = async function (context, myTimer) {
     console.log(err);
     process.exit(-1);
   }
+  context.log(`Environment: ${process.env}`);
   context.log('JavaScript timer trigger function ran!', timeStamp);
 };
 

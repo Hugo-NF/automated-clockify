@@ -1,6 +1,6 @@
-const blobStream = require('blob-stream');
-const { getCurrentUser, detailedReport } = require('./clockify');
+const getStream = require('get-stream');
 
+const { getCurrentUser, detailedReport } = require('./clockify');
 const { sendEmail } = require('./emailSender');
 const { generalEmail } = require('../emails/general');
 
@@ -108,11 +108,8 @@ module.exports.buildReport = function (timespan) {
               ciphers: 'SSLv3',
             },
           };
-
-          reportReponse.data
-            .pipe(blobStream())
-            .on('finish', () => {
-              const pdfBlob = this.toBlob();
+          getStream.buffer(reportReponse.data)
+            .then((stream) => {
               const message = {
                 from: `${SENDER_NAME} <${SENDER_EMAIL}>`,
                 to: RECEIVERS_LIST,
@@ -126,12 +123,12 @@ module.exports.buildReport = function (timespan) {
                 attachments: [
                   {
                     filename: `Relatório ${spanName} (${dateRangeStart.formatDate(false)} - ${dateRangeEnd.formatDate(false)}) - ${name}.pdf`,
-                    content: pdfBlob,
+                    content: stream,
                     contentType: 'application/pdf',
                   },
                 ],
-                onError: (res) => console.log(`E-mails sent successfully: ${res}`),
-                onSuccess: (err) => console.log(`E-mails failed to send: ${err}`),
+                onError: (err) => console.log(`E-mail failed: ${JSON.stringify(err)}`),
+                onSuccess: (res) => console.log(`E-mail sent successfully: ${JSON.stringify(res)}`),
               };
 
               sendEmail(emailAuthOptions, message);
